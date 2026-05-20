@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// import LoginPage from "../features/auth/pages/LoginPage";
-// import ProfilePage from "../features/profile/pages/ProfilePage";
+import Dashboard from "../features/dashboard/pages/Dashboard";
 
-export default function Router() {
+function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile/:id" element={<ProfilePage />} /> */}
+        <Route path="/" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
 }
+
+export default AppRoutes;
