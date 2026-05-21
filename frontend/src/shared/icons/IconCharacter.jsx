@@ -13,8 +13,17 @@ function BaseIcon({ src, alt }) {
 function HelloIcon() {
   return (
     <BaseIcon
-      src={import.meta.env.VITE_CHARACTER_IMAGE}
+      src={import.meta.env.VITE_CHARACTER_IMAGE_HELLO}
       alt="hello"
+    />
+  );
+}
+
+function WelcomeIcon() {
+  return (
+    <BaseIcon
+      src={import.meta.env.VITE_CHARACTER_IMAGE_WELCOME}
+      alt="welcome"
     />
   );
 }
@@ -22,6 +31,7 @@ function HelloIcon() {
 
 const IconCharacter = {
   Hello: HelloIcon,
+  Welcome: WelcomeIcon,
 };
 
 export default IconCharacter;

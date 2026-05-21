@@ -2,10 +2,6 @@ html {
   scroll-behavior: smooth;
 }
 
-.site-header {
-  background: rgba(255, 247, 251, 0.68);
-  backdrop-filter: blur(18px);
-}
 
 .brand-badge,
 .number-badge {
