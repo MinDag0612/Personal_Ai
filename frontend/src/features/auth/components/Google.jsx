@@ -4,10 +4,12 @@ import { useGoogleLogin } from "@react-oauth/google"
 export default function Google({
     onSuccess,
     onError,
+    mode = "signup"
 }) {
     const login = useGoogleLogin({
         onSuccess: tokenResponse => {
-            console.log(tokenResponse)
+            console.log("Login successful!")
+            console.log(tokenResponse["access_token"])
 
             onSuccess(tokenResponse)
         },
@@ -21,7 +23,7 @@ export default function Google({
     return (
         <button className="signup-google-button" type="button" onClick={() => login()}>
             <img src={googleIcon} alt="" aria-hidden="true" />
-            <span>Đăng kí bằng Google</span>
+            <span>{mode === "signup" ? "Đăng kí bằng Google" : "Đăng nhập bằng Google"}</span>
         </button>
     )
 }

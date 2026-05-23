@@ -27,10 +27,19 @@ class UserManager(BaseUserManager):
 
 
 class Users(AbstractBaseUser, PermissionsMixin):
+    AUTH_PROVIDERS_MANUAL = "manual"
+    AUTH_PROVIDERS_GOOGLE = "google"
+
+    AUTH_PROVIDERS = [
+        (AUTH_PROVIDERS_MANUAL, "Manual"),
+        (AUTH_PROVIDERS_GOOGLE, "Google"),
+    ]
+
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     avatar_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    auth_provider = models.CharField(max_length=50, choices=AUTH_PROVIDERS, default=AUTH_PROVIDERS_MANUAL)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

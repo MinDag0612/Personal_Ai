@@ -1,7 +1,7 @@
 import IconCharacter from "../../../shared/icons/IconCharacter";
 import Google from "./Google";
 
-function SignupForm({ onSubmit, onGoogleSuccess, onGoogleError }) {
+function SignupForm({ onSubmit, onHandleOtpConfirm, onGoogleSuccess, onGoogleError, otpEnabled }) {
   return (
     <form className="signup-card glass-card shadow-sm" onSubmit={onSubmit}>
       <div className="signup-card-header">
@@ -15,7 +15,7 @@ function SignupForm({ onSubmit, onGoogleSuccess, onGoogleError }) {
         </div>
       </div>
 
-      <div className="signup-field-grid">
+      <fieldset className="signup-field-grid" disabled={otpEnabled}>
         <label className="signup-field">
           <span>Tên hiển thị</span>
           <input type="text" name="displayName" placeholder="Tony Nguyen" />
@@ -35,11 +35,34 @@ function SignupForm({ onSubmit, onGoogleSuccess, onGoogleError }) {
           <span>Xác nhận mật khẩu</span>
           <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" />
         </label>
-      </div>
+      </fieldset>
 
       <button className="btn btn-dark btn-lg rounded-pill fw-bold signup-submit" type="submit">
         Tạo tài khoản
       </button>
+
+      {otpEnabled && (
+        <div className="signup-otp-row" >
+          <label className="signup-field signup-otp-field">
+            <span>Mã OTP</span>
+            <input
+              type="text"
+              name="otp"
+              inputMode="numeric"
+              maxLength="6"
+              placeholder="Nhập mã OTP"
+            />
+          </label>
+
+          <button
+            className="btn btn-outline-dark btn-lg rounded-pill fw-bold signup-otp-confirm"
+            type="button"
+            onClick={onHandleOtpConfirm}
+          >
+            Xác nhận
+          </button>
+        </div>
+      )}
 
       <div className="signup-divider">
         <span>hoặc</span>

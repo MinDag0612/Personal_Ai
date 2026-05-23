@@ -165,6 +165,34 @@
   margin-top: 0.25rem;
 }
 
+.signup-otp-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: end;
+  margin-top: 0.95rem;
+}
+
+.signup-otp-field {
+  margin-bottom: 0;
+}
+
+.signup-otp-confirm {
+  min-width: 132px;
+  min-height: 48px;
+  padding-inline: 1.25rem;
+}
+
+.signup-field input:disabled,
+.signup-otp-confirm:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.signup-field input:disabled {
+  background: rgba(255, 255, 255, 0.48);
+}
+
 .signup-login-note {
   margin-top: 1rem;
   text-align: center;
@@ -194,6 +222,15 @@
   .signup-field-grid {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+
+  .signup-otp-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .signup-otp-confirm {
+    width: 100%;
   }
 
   .signup-card-header {

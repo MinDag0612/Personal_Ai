@@ -6,18 +6,57 @@ import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [notification, setNotification] = useState(null);
+  const [otpEnabled, setOtpEnabled] = useState(false);
   const Toast = notification ? Notification[notification.kind] : null;
   const navigate = useNavigate();
 
-  function GoogleSuccess(tokenResponse) {
-    alert("Google login successful! Token response: " + JSON.stringify(tokenResponse));
+  async function GoogleSuccess(tokenResponse) {
+    const token = tokenResponse["access_token"];
+    const response = await fetch("/api/register-gg/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        "access_token": token
+      }),
+    });
+
+    console.log(response);
+    
+    if (response.ok) {
+      const responseData = await response.json();
+      setNotification({
+        kind: "Success",
+        title: "Đăng kí thành công",
+        message: responseData.message,
+      });
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 1200);
+    }
+    else {
+      const responseData = await response.json();
+      setNotification({
+        kind: "Error",
+        title: "Đăng kí thất bại",
+        message: responseData.message || "Đã xảy ra lỗi khi đăng kí bằng Google.",
+      });
+    }
+
   }
 
   function GoogleError() {
-    alert("Google login failed!");
+    setNotification({
+      kind: "Error",
+      title: "Đăng kí thất bại",
+      message: "Đã xảy ra lỗi khi đăng kí bằng Google.",
+    });
   }
 
-  async function handleSignup(event) {
+  async function handleGetOtp(event) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -53,37 +92,96 @@ function Signup() {
       return;
     }
 
-    // Verify success case - Handle API response
-    const responseData = await fetch("/api/register/", {
+    setOtpEnabled(true);
+
+
+    const response = await fetch("/api/otp/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "email": email,
-        "name": displayName,
-        "password": password
+        email: email,
       }),
     });
 
-    if (responseData.ok) {
+    if (!response.ok) {
+      const responseData = await response.json();
+      setNotification({
+        kind: "Error",
+        title: "Không thể gửi OTP",
+        message: responseData.message || "Đã xảy ra lỗi khi gửi OTP.",
+      });
+      return;
+    }
+    else {
+      setNotification(null);
+      setNotification({
+        kind: "Info",
+        title: "Xác nhận OTP",
+        message: "Vui lòng nhập mã OTP để hoàn tất đăng kí.",
+      });
+    }
+  }
+
+  async function handleOtpConfirm(event) {
+
+    const password = document.querySelector('input[name="password"]').value.trim();
+    const email = document.querySelector('input[name="email"]').value.trim();
+    const displayName = document.querySelector('input[name="displayName"]').value.trim();
+    const otpInput = document.querySelector('input[name="otp"]');
+    const otp = otpInput ? otpInput.value.trim() : "";
+
+    if (!otp) {
+      setNotification(null);
+      setNotification({
+        kind: "Error",
+        title: "Không thể xác nhận OTP",
+        message: "Vui lòng nhập mã OTP.",
+      });
+      return;
+    }
+
+    console.log("Submitting OTP confirmation with data:", JSON.stringify({
+        email: email,
+        otp: otp,
+        password: password,
+        name: displayName,
+      }));
+
+    const response = await fetch("/api/otp-verify/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        otp: otp,
+        password: password,
+        name: displayName,
+      }),
+    })
+
+    if (response.ok) {
+      setNotification(null);
       setNotification({
         kind: "Success",
         title: "Đăng kí thành công",
-        message: "Tài khoản của bạn đã được tạo thành công. Đang chuyển hướng đến Home...",
+        message: "Tài khoản của bạn đã được tạo thành công. Đang chuyển hướng đến trang Home...",
       });
 
       setTimeout(() => {
         navigate("/home");
       }, 1200);
+    }
+    else {
+      const responseData = await response.json();
 
-    } else {
-      const responseText = await responseData.json();
-
+      setNotification(null);
       setNotification({
         kind: "Error",
-        title: "Không thể đăng kí",
-        message: responseText.message || "Đã xảy ra lỗi khi đăng kí tài khoản.",
+        title: "Xác nhận OTP thất bại",
+        message: responseData.message || "Đã xảy ra lỗi khi xác nhận OTP.",
       });
     }
   }
@@ -102,9 +200,11 @@ function Signup() {
         <section className="signup-hero">
           <div className="signup-panel">
             <SignupForm
-              onSubmit={handleSignup}
+              onSubmit={handleGetOtp}
+              onHandleOtpConfirm={handleOtpConfirm}
               onGoogleSuccess={GoogleSuccess}
               onGoogleError={GoogleError}
+              otpEnabled={otpEnabled}
             />
           </div>
         </section>

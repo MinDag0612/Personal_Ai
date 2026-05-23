@@ -4,3 +4,4 @@ from ..models import Users
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+    

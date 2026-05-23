@@ -20,8 +20,8 @@ function Header({
         {/* // && trả về giá trị sau cùng nếu tất cả đều đúng */}
 
         <div className="d-flex gap-2 ms-auto order-2 order-lg-3">
-          <a className="btn btn-light rounded-pill fw-bold px-3" href="/login">Đăng nhập</a>
-          <a className="btn btn-dark rounded-pill fw-bold px-3" href="/signup">Đăng kí</a>
+          <a className="btn btn-light rounded-pill fw-bold px-3" href="/auth/login">Đăng nhập</a>
+          <a className="btn btn-dark rounded-pill fw-bold px-3" href="/auth/signup">Đăng kí</a>
         </div>
       </nav>
     </header>
