@@ -28,10 +28,20 @@ function WelcomeIcon() {
   );
 }
 
+function ComebackIcon() {
+  return (
+    <BaseIcon
+      src={import.meta.env.VITE_CHARACTER_IMAGE_COMEBACK}
+      alt="comeback"
+    />
+  );
+}
+
 
 const IconCharacter = {
   Hello: HelloIcon,
   Welcome: WelcomeIcon,
+  Comeback: ComebackIcon,
 };
 
 export default IconCharacter;

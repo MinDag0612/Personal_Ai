@@ -2,7 +2,6 @@ import os
 from urllib import response
 
 from rest_framework import serializers
-from google.oauth2 import id_token
 import requests
 from dotenv import load_dotenv
 

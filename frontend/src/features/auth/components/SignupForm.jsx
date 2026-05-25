@@ -71,7 +71,7 @@ function SignupForm({ onSubmit, onHandleOtpConfirm, onGoogleSuccess, onGoogleErr
       <Google onSuccess={onGoogleSuccess} onError={onGoogleError} />
 
       <p className="signup-login-note">
-        Đã có tài khoản? <a href="/login">Đăng nhập</a>
+        Đã có tài khoản? <a href="/auth/signin">Đăng nhập</a>
       </p>
     </form>
   );

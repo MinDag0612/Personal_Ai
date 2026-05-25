@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Dashboard from "../features/dashboard/pages/Dashboard";
 import Signup from "../features/auth/pages/Signup";
+import Signin from "../features/auth/pages/Singin";
 import AuthLayout from "../features/auth/pages/AuthLayout";
 import { Navigate } from "react-router-dom";
 
@@ -15,6 +16,7 @@ function AppRoutes() {
 
           <Route index element={<Navigate to="signup" replace />} />
           <Route path="signup" element={<Signup />} />
+          <Route path="signin" element={<Signin />} />
         </Route>
       </Routes>
     </BrowserRouter>

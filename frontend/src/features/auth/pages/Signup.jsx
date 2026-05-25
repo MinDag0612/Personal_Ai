@@ -12,7 +12,7 @@ function Signup() {
 
   async function GoogleSuccess(tokenResponse) {
     const token = tokenResponse["access_token"];
-    const response = await fetch("/api/register-gg/", {
+    const response = await fetch("/api/users/register-gg/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function Signup() {
       });
 
       setTimeout(() => {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }, 1200);
     }
     else {
@@ -93,9 +93,15 @@ function Signup() {
     }
 
     setOtpEnabled(true);
+    setNotification(null);
+    setNotification({
+      kind: "Info",
+      title: "Đã gửi OTP qua email của bạn",
+      message: "Vui lòng kiểm tra email và nhập mã OTP để hoàn tất đăng kí.",
+    });
 
 
-    const response = await fetch("/api/otp/", {
+    const response = await fetch("/api/users/otp/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +130,7 @@ function Signup() {
     }
   }
 
-  async function handleOtpConfirm(event) {
+  async function handleOtpConfirm() {
 
     const password = document.querySelector('input[name="password"]').value.trim();
     const email = document.querySelector('input[name="email"]').value.trim();
@@ -149,7 +155,7 @@ function Signup() {
         name: displayName,
       }));
 
-    const response = await fetch("/api/otp-verify/", {
+    const response = await fetch("/api/users/otp-verify/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -171,7 +177,7 @@ function Signup() {
       });
 
       setTimeout(() => {
-        navigate("/home");
+        navigate("/home", { replace: true });
       }, 1200);
     }
     else {

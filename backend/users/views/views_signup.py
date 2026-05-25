@@ -1,19 +1,19 @@
 from django.shortcuts import render
 
-from .serializers.otp_serializer import OtpSerializer, OtpVerifySerializer
+from ..serializers.otp_serializer import OtpSerializer, OtpVerifySerializer
 
-from .serializers.signup_gg_serializer import LoginGGSerializer
+from ..serializers.signup_gg_serializer import LoginGGSerializer
 from rest_framework import viewsets, mixins
-from .models import Users
-from .serializers.user_serializer import UserSerializer
+from ..models import Users
+from ..serializers.user_serializer import UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail, ValidationError
 from django.core.cache import cache
-from .services.UserService import UserService
+from ..services.UserService import UserService
 from django.core.mail import send_mail
 import random
-from .services.EmailService import EmailService
+from ..services.EmailService import EmailService
 
 def get_error_message(errors):
     if isinstance(errors, ErrorDetail):
@@ -48,7 +48,7 @@ class RegisterGGViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             try:
                 user = serializer.save()
             except ValidationError as exc:
@@ -100,6 +100,7 @@ class OtpViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 )
             try:
                 EmailService.send_otp_email(serializer.validated_data["email"], otp)
+                cache.set(serializer.validated_data["email"], otp, timeout=300)
             except Exception as e:
                 return Response(
                     {
@@ -108,8 +109,6 @@ class OtpViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
             
-            cache.set(serializer.validated_data["email"], otp, timeout=300)
-
             return Response(
                 {
                     "message": "OTP đã được gửi thành công."
@@ -187,3 +186,4 @@ class OtpVerifyViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+    

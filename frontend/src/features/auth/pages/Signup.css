@@ -17,6 +17,10 @@
   width: min(100%, 720px);
 }
 
+.signin-panel {
+  width: min(100%, 620px);
+}
+
 .signup-character-slot {
   flex: 0 0 clamp(94px, 16vw, 140px);
   width: clamp(94px, 16vw, 140px);
@@ -165,6 +169,50 @@
   margin-top: 0.25rem;
 }
 
+.signin-field-stack {
+  display: grid;
+  gap: 0;
+}
+
+.signin-form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  margin: -0.2rem 0 0.95rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.signin-form-options a {
+  color: var(--pink-strong);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.signin-form-options a:hover {
+  color: var(--lavender-strong);
+}
+
+.signin-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.signin-remember input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  accent-color: var(--lavender-strong);
+}
+
+.signin-remember span {
+  overflow-wrap: anywhere;
+}
+
 .signup-otp-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -231,6 +279,11 @@
 
   .signup-otp-confirm {
     width: 100%;
+  }
+
+  .signin-form-options {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .signup-card-header {
