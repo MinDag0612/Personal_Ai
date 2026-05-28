@@ -10,6 +10,8 @@ from   ..views.views_signup import format_error_detail, get_error_message
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 class SigninViewSet(viewsets.GenericViewSet):
     queryset = Users.objects.all()
     serializer_class = LoginSerializer
@@ -28,10 +30,13 @@ class SigninViewSet(viewsets.GenericViewSet):
                     },
                     status=status.HTTP_401_UNAUTHORIZED
                 )
+            refresh = RefreshToken.for_user(user)
             return Response(
                 {
                     "message": "Đăng nhập thành công, chuyển hướng đến Home ...",
-                    "user": UserSerializer(user).data
+                    "user": UserSerializer(user).data,
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh)
                 },
                 status=status.HTTP_200_OK
             )
@@ -69,10 +74,13 @@ class SigninGGViewSet(viewsets.GenericViewSet):
             print(auth_provider, email, name)
             user = Users.objects.filter(email=email, auth_provider=auth_provider).first()
             if user is not None:
+                refresh = RefreshToken.for_user(user)
                 return Response(
                     {
                         "message": "Đăng nhập thành công, chuyển hướng đến Home ...",
-                        "user": UserSerializer(user).data
+                        "user": UserSerializer(user).data,
+                        "access_token": str(refresh.access_token),
+                        "refresh_token": str(refresh)
                     },
                     status=status.HTTP_200_OK
                 )
